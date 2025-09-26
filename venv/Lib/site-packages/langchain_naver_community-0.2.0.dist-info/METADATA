@@ -1,0 +1,49 @@
+Metadata-Version: 2.4
+Name: langchain-naver-community
+Version: 0.2.0
+Summary: Add your description here
+Project-URL: Repository, https://github.com/e7217/langchain-naver-community
+Author-email: Changyong Um <eum6211@gmail.com>
+License-Expression: MIT
+License-File: LICENSE
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.8
+Requires-Dist: aiohttp>=3.10.11
+Requires-Dist: langchain>=0.0.27
+Requires-Dist: pydantic>=2.10.6
+Provides-Extra: test
+Requires-Dist: pytest-asyncio>=0.21.0; extra == 'test'
+Requires-Dist: pytest-cov>=4.1.0; extra == 'test'
+Requires-Dist: pytest>=7.0.0; extra == 'test'
+Description-Content-Type: text/markdown
+
+# 🦜️🔗Langchain Naver Community
+
+## Welcome
+**Langchain Naver Community** is a Python package that integrates Naver's various APIs with LangChain, making it easier to build powerful applications using Naver's services within the LangChain ecosystem. This package provides a seamless interface to interact with Naver's APIs while leveraging LangChain's capabilities for building language model applications.
+
+
+## Installation
+To install `langchain-naver-community`, simply run the following command:
+```python
+pip install -U langchain-naver-community
+```
+### Setting Up Credentials
+Setting Up Credentials
+To use Naver's APIs, you need to set up your API credentials. You can obtain a **Naver API Key** by signing up at the [Naver Developers](https://developers.naver.com/main/) website and creating an application.
+
+Once you have your **Client ID** and **Client Secret**, you can set them as environment variables in your script as follows:
+```
+import getpass
+import os
+
+# Set your Naver API credentials as environment variables
+if not os.environ.get("NAVER_CLIENT_ID"):
+    os.environ["NAVER_CLIENT_ID"] = getpass.getpass("Enter your Naver Client ID:\n")
+
+if not os.environ.get("NAVER_CLIENT_SECRET"):
+    os.environ["NAVER_CLIENT_SECRET"] = getpass.getpass("Enter your Naver Client Secret:\n")
+
+```
+This ensures that your credentials are securely stored without being hardcoded into your scripts. 🔒
