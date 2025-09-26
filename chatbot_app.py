@@ -52,7 +52,7 @@ def setup_rag_chain(source_filter=None): # source_filter 인자 추가
         vectorstore = Chroma(persist_directory=CHROMA_DB_PATH, embedding_function=embeddings)
         
         # --- 리트리버 필터링 적용 ---
-        search_kwargs = {"k": 20}
+        search_kwargs = {"k": 5}
         if source_filter:
             search_kwargs["filter"] = {"source_type": source_filter}
             st.info(f"ℹ️ 리트리버 필터링 적용: source_type = '{source_filter}'")
