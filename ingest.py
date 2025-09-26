@@ -23,12 +23,6 @@ from selenium.common.exceptions import WebDriverException, TimeoutException, NoS
 
 # Langchain Document Loaders for local files
 from langchain_community.document_loaders import TextLoader, PyPDFLoader, Docx2txtLoader, CSVLoader
-# Note: For Unstructured loaders (e.g., UnstructuredWordDocumentLoader, UnstructuredExcelLoader),
-# you generally need the 'unstructured' library installed.
-# For .pdf, 'pypdf'
-# For .docx, 'python-docx'
-# For .csv, 'pandas' (often implicitly used by CSVLoader or via unstructured)
-# For .xlsx, 'openpyxl' (often implicitly used by UnstructuredExcelLoader or via unstructured)
 
 
 # Load environment variables from .env file
@@ -45,6 +39,10 @@ NAVER_CLIENT_SECRET = os.environ.get("NAVER_CLIENT_SECRET")
 LOCAL_DOCS_PATH = os.environ.get('LOCAL_DOCS_PATH', './local_documents')
 NAVER_BLOG_QUERIES_FILE = os.environ.get("NAVER_BLOG_QUERIES_FILE", "./naver_blog_queries.txt") # .env에서 쿼리 파일 경로 로드
 
+# LLM 모델 이름도 환경 변수에서 로드하여 출력
+OLLAMA_LLM_MODEL = os.environ.get('OLLAMA_LLM_MODEL', 'llama3') # <-- 이 라인 추가 (LLM 모델 이름 로드)
+
+
 # ChromeDriver path configuration
 CHROMEDRIVER_PATH = os.path.join(os.path.dirname(__file__), 'chromedriver.exe') 
 
@@ -55,6 +53,7 @@ print(f"Naver Client ID (first 5 chars): {NAVER_CLIENT_ID[:5] if NAVER_CLIENT_ID
 print(f"ChromeDriver Path: {CHROMEDRIVER_PATH}")
 print(f"Local Documents Path: {LOCAL_DOCS_PATH}")
 print(f"Naver Blog Queries File: {NAVER_BLOG_QUERIES_FILE}")
+print(f"LLM Model: {OLLAMA_LLM_MODEL}") # <--- 이 라인을 추가합니다.
 
 
 # Validate Naver API credentials
@@ -78,7 +77,7 @@ def get_new_driver():
     options.add_argument('disable-gpu')
     options.add_argument('no-sandbox')
     options.add_argument('disable-dev-shm-usage')
-    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
+    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit=537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
     options.add_experimental_option("excludeSwitches", ["enable-logging"])
 
     try:
@@ -282,7 +281,6 @@ def retrieve_and_split_naver_blog_contents(queries: list, num_results_per_query:
                 items = search_data.get('items', [])
                 
                 unique_items = []
-                # 현재 검색 세션 내에서만 중복을 방지합니다.
                 existing_links_in_session = {item.get('link') for item in current_query_results}
                 
                 for item in items:
